@@ -7,7 +7,8 @@ import {
     selectUserName,
     selectUserPhoto,
     selectUserEmail,
-    setUserLoginDetails
+    setUserLoginDetails,
+    setSignOutState
 } from "../features/user/userSlice";
 import { useEffect } from "react";
 
@@ -28,12 +29,20 @@ const Header = (props) => {
     }, [userName]);
 
     const handleAuth = () => {
-        signInWithPopup(auth, provider).then((result) => {
-            setUser(result.user);
-            console.log(result);
-        }).catch((error) => {
-            alert(error.message);
-        })
+        if (!userName) {
+            signInWithPopup(auth, provider).then((result) => {
+                setUser(result.user);
+                console.log(result);
+            }).catch((error) => {
+                alert(error.message);
+            })
+        } else if (userName) {
+            auth.signOut().then(() => {
+                dispatch(setSignOutState());
+                history("/");
+            })
+            .catch((error) => alert(error.message))
+        }
     };
 
     const setUser = (user) => {
