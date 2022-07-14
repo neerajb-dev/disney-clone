@@ -1,40 +1,80 @@
 import styled from "styled-components";
+import { auth, provider } from "../firebase";
+import { useDispatch, useSelector } from "react-redux/es/exports";
+import { useNavigate } from "react-router-dom";
+import { signInWithPopup } from "firebase/auth";
+import {
+    selectUserName,
+    selectUserPhoto,
+    selectUserEmail,
+    setUserLoginDetails
+} from "../features/user/userSlice";
 
 const Header = (props) => {
+
+    const dispatch = useDispatch();
+    const history = useNavigate();
+    const userName = useSelector(selectUserName);
+    const userPhoto = useSelector(selectUserPhoto);
+
+    const handleAuth = () => {
+        signInWithPopup(auth, provider).then((result) => {
+            setUser(result.user);
+            console.log(result);
+        }).catch((error) => {
+            alert(error.message);
+        })
+    };
+
+    const setUser = (user) => {
+        dispatch(
+            setUserLoginDetails({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL,
+            })
+        );
+    };
+
     return (
         <Nav>
             <Logo>
                 <img src="/images/logo.svg" alt="" />
             </Logo>
-            <NavMenu>
-                <a href="/home">
-                    <img src="/images/home-icon.svg" alt="HOME" />
-                    <span>Home</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/search-icon.svg" alt="HOME" />
-                    <span>Search</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/watchlist-icon.svg" alt="HOME" />
-                    <span>Watchlist</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/original-icon.svg" alt="HOME" />
-                    <span>Originals</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/movie-icon.svg" alt="HOME" />
-                    <span>Movies</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/series-icon.svg" alt="HOME" />
-                    <span>Series</span>
-                </a>
-            </NavMenu>
-            {/* TODO: Add functionality to login button */}
-            {/* TODO: Add firebase functionality */}
-            <Login>Login</Login>
+            {
+                !userName ?
+                    <Login onClick={handleAuth}>Login</Login>
+                    :
+                    <>
+                        <NavMenu>
+                            <a href="/home">
+                                <img src="/images/home-icon.svg" alt="HOME" />
+                                <span>Home</span>
+                            </a>
+                            <a href="/home">
+                                <img src="/images/search-icon.svg" alt="HOME" />
+                                <span>Search</span>
+                            </a>
+                            <a href="/home">
+                                <img src="/images/watchlist-icon.svg" alt="HOME" />
+                                <span>Watchlist</span>
+                            </a>
+                            <a href="/home">
+                                <img src="/images/original-icon.svg" alt="HOME" />
+                                <span>Originals</span>
+                            </a>
+                            <a href="/home">
+                                <img src="/images/movie-icon.svg" alt="HOME" />
+                                <span>Movies</span>
+                            </a>
+                            <a href="/home">
+                                <img src="/images/series-icon.svg" alt="HOME" />
+                                <span>Series</span>
+                            </a>
+                        </NavMenu>
+                        <UserImg src={userPhoto} alt={userName} />
+                    </>
+            }
         </Nav>
     )
 };
@@ -132,9 +172,9 @@ const NavMenu = styled.div`
 
     
 
-    // @media (max-width: 768px) {
-    //     display: none;
-    // }
+    @media (max-width: 768px) {
+        display: none;
+    }
 
 `;
 
@@ -152,6 +192,12 @@ const Login = styled.a`
         color: #000;
         border-color: transparent;
     }
+`;
+
+const UserImg = styled.img`
+    height: 100%;
+    border-radius: 50%;
+    padding: 10px;
 `;
 
 export default Header;
