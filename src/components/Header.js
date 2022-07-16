@@ -16,7 +16,7 @@ const Header = (props) => {
 
     const dispatch = useDispatch();
     const history = useNavigate();
-    const userName = useSelector(selectUserName);
+    const userName = useSelector(selectUserName);          
     const userPhoto = useSelector(selectUserPhoto);
 
     useEffect(() => {
@@ -44,6 +44,7 @@ const Header = (props) => {
         }
     };
 
+    // dispatch action to reducer
     const setUser = (user) => {
         dispatch(
             setUserLoginDetails({

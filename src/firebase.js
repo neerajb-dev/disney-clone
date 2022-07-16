@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore"
+import { getFirestore, collection } from "firebase/firestore"
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
@@ -18,6 +18,9 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const storage = getStorage(app);
+// collection ref
+const colRef = collection(db, 'movies');
 
-export {auth, provider, storage};
+export { auth, provider, storage, colRef };
+
 export default db;
