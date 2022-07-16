@@ -24,6 +24,9 @@ const Header = (props) => {
             if (user) {
                 setUser(user);
                 history("/home");
+            } else {
+                setUser({});
+                history("/");
             }
         })
     }, [userName]);
