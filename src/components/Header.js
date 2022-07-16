@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { auth, provider } from "../firebase";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { useNavigate } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import {
     selectUserName,
     selectUserPhoto,
@@ -20,8 +20,8 @@ const Header = (props) => {
     const userPhoto = useSelector(selectUserPhoto);
 
     useEffect(() => {
-        auth.onAuthStateChanged(async (user) => {
-            if (!user) {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
                 setUser(user);
                 history("/home");
             }
