@@ -127,7 +127,7 @@ const Player = styled.button`
     font-size: 15px;
     margin: 0px 22px 0px 0px;
     padding: 0px 24px;
-    height; 56px;
+    height: 56px;
     border-radius: 4px;
     align-items: center;
     cursor: pointer;
